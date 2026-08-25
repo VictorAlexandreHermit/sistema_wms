@@ -1,8 +1,8 @@
 # Estado Atual do Projeto - WMS Agiliza
 
 - **Última Atualização:** 2026-08-25
-- **Fase Atual:** Fase 1 - Infraestrutura e Base do Projeto (Concluída)
-- **Próximo Passo Recomendado:** Fase 2 - Banco de Dados, Migrations e Cadastros Base
+- **Fase Atual:** Fase 1 - Infraestrutura e Base do Projeto (Concluída e Versionada)
+- **Próximo Passo Recomendado:** Conectar repositório remoto no GitHub e iniciar a Fase 2 - Banco de Dados, Migrations e Cadastros Base
 
 ---
 
@@ -31,8 +31,14 @@
 - [x] Regras de reescrita e proteção `.htaccess` na raiz e subpastas configuradas.
 - [x] Front Controller `index.php` criado com verificação de segurança `WMS_EXEC`.
 - [x] Configuração centralizada em `config/config.php` sem uso de `.env`.
+- [x] Modelo seguro `config/config.example.php` criado para versionamento sem segredos.
 - [x] Conexão PDO segura estruturada em `config/database.php`.
 - [x] Migration inicial com 13 tabelas criada em `database/migrations/2026_08_25_000001_create_initial_schema.sql`.
 - [x] Script runner de migrations com controle de histórico criado em `database/migrate.php`.
 - [x] Recursos visuais estáticos configurados localmente (Bootstrap 5, CSS Precision Logistics, tipografia Inter).
 - [x] Helpers de infraestrutura (`SessionHelper`, `SanitizeHelper`, `CsrfHelper`, `LogHelper`, `AuthHelper`) implementados.
+- [x] Repositório Git local inicializado na branch `main`.
+- [x] Arquivo `.gitignore` criado protegendo credenciais, logs, uploads, dumps e arquivos de SO/IDE.
+- [x] Arquivo `.gitattributes` criado normalizando finais de linha (LF) e declarando binários.
+- [x] Commit inicial de versão registrado (`Configura Git e estrutura inicial do WMS Agiliza`).
+- [x] Repositório preparado para vinculação remota ao GitHub.
