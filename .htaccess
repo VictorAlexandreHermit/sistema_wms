@@ -1,0 +1,34 @@
+# Regras de Segurança e Roteamento Apache - WMS Agiliza
+
+# Desativar listagem de diretórios
+Options -Indexes
+
+# Habilitar Engine de Reescrita de URL
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Caso a requisição seja para um arquivo ou diretório existente em assets/, permite o acesso direto
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteCond %{REQUEST_URI} ^/assets/ [NC]
+    RewriteRule ^ - [L]
+
+    # Bloquear acesso público direto às pastas internas
+    RewriteRule ^(config|app|database|uploads|logs)(/|$) - [F,L]
+
+    # Redirecionar todas as outras requisições para o Front Controller index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+# Impedir acesso direto a arquivos de configuração ou sensíveis
+<FilesMatch "\.(sql|log|md|json|lock|env|git.*)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>

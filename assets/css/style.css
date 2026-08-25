@@ -1,0 +1,169 @@
+/**
+ * WMS Agiliza - Precision Logistics Theme Custom Styles
+ * Diretrizes visuais conforme docs/DESIGN.md
+ */
+
+/* Fonte Inter e Configurações de Números Tabulares */
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+    src: local('Inter'), system-ui, -apple-system, sans-serif;
+}
+
+:root {
+    --wms-sidebar-bg: #0F172A;
+    --wms-sidebar-width: 260px;
+    --wms-bg: #F8FAFC;
+    --wms-surface: #FFFFFF;
+    --wms-border: #E2E8F0;
+    --wms-text-main: #191C1E;
+    --wms-text-muted: #515F74;
+
+    --wms-primary: #0F172A;
+    --wms-primary-hover: #1E293B;
+
+    --wms-success: #16A34A;
+    --wms-warning: #D97706;
+    --wms-danger: #DC2626;
+    --wms-info: #0284C7;
+
+    --wms-radius-sm: 0.125rem;
+    --wms-radius-default: 0.25rem;
+    --wms-radius-md: 0.375rem;
+    --wms-radius-lg: 0.5rem;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--wms-bg);
+    color: var(--wms-text-main);
+    margin: 0;
+    padding: 0;
+}
+
+/* Alinhamento tabular para SKU, códigos de barras e quantidades */
+.tabular-nums, .sku-code, .barcode-code, table td.qty {
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+}
+
+/* Layout Principal: Fixed Sidebar / Fluid Content */
+.wms-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.wms-sidebar {
+    width: var(--wms-sidebar-width);
+    background-color: var(--wms-sidebar-bg);
+    color: #FFFFFF;
+    flex-shrink: 0;
+    padding: 20px 0;
+}
+
+.wms-sidebar .brand {
+    padding: 0 20px 20px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.wms-sidebar .nav-link {
+    color: #94A3B8;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    font-weight: 500;
+    border-left: 4px solid transparent;
+}
+
+.wms-sidebar .nav-link:hover, .wms-sidebar .nav-link.active {
+    color: #FFFFFF;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-left-color: #38BDF8;
+}
+
+.wms-content {
+    flex-grow: 1;
+    padding: 32px;
+    background-color: var(--wms-bg);
+}
+
+/* Cards & Tabelas */
+.card-wms {
+    background-color: var(--wms-surface);
+    border: 1px solid var(--wms-border);
+    border-radius: var(--wms-radius-default);
+    padding: 20px;
+    box-shadow: none;
+}
+
+.table-wms {
+    background-color: var(--wms-surface);
+    border: 1px solid var(--wms-border);
+    border-radius: var(--wms-radius-default);
+    width: 100%;
+}
+
+.table-wms th {
+    background-color: #F1F5F9;
+    color: var(--wms-text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 12px 16px;
+}
+
+.table-wms td {
+    padding: 14px 16px;
+    border-top: 1px solid var(--wms-border);
+}
+
+.table-wms tbody tr:hover {
+    background-color: #F1F5F9;
+}
+
+/* Botões Estilo Precision Logistics */
+.btn-wms-primary {
+    background-color: var(--wms-primary);
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--wms-radius-default);
+    padding: 10px 20px;
+    font-weight: 600;
+}
+
+.btn-wms-primary:hover {
+    background-color: var(--wms-primary-hover);
+    color: #FFFFFF;
+}
+
+.btn-wms-secondary {
+    background-color: #FFFFFF;
+    color: #334155;
+    border: 1px solid var(--wms-border);
+    border-radius: var(--wms-radius-default);
+    padding: 10px 20px;
+    font-weight: 600;
+}
+
+.btn-wms-secondary:hover {
+    background-color: #F1F5F9;
+}
+
+/* Badges e Status */
+.badge-status {
+    padding: 4px 10px;
+    border-radius: var(--wms-radius-lg);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge-success { background-color: #DCFCE7; color: #15803D; }
+.badge-warning { background-color: #FEF3C7; color: #B45309; }
+.badge-danger  { background-color: #FEE2E2; color: #B91C1C; }
+.badge-info    { background-color: #E0F2FE; color: #0369A1; }
