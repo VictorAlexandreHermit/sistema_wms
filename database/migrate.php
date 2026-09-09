@@ -1,22 +1,28 @@
 <?php
 /**
  * WMS Agiliza - Executor de Migrations de Banco de Dados
- * 
- * Pode ser executado via CLI (`php database/migrate.php`) ou via Front Controller.
  */
 
-define('WMS_EXEC', true);
+if (!defined('WMS_EXEC')) {
+    define('WMS_EXEC', true);
+}
+
+ob_implicit_flush(true);
 
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../app/helpers/LogHelper.php';
 
-echo "=== WMS Agiliza - Migrations Runner ===\n";
+function outputLine(string $msg): void {
+    echo $msg . "\n";
+    flush();
+}
+
+outputLine("=== WMS Agiliza - Migrations Runner ===");
 
 try {
     $pdo = Database::getConnection();
 
-    // 1. Garante que a tabela schema_migrations exista
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS schema_migrations (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -25,11 +31,9 @@ try {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     ");
 
-    // 2. Busca migrations já executadas
     $stmt = $pdo->query("SELECT migration FROM schema_migrations");
     $executed = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-    // 3. Lê todos os arquivos SQL na pasta database/migrations/
     $migrationsDir = __DIR__ . '/migrations';
     $files = glob($migrationsDir . '/*.sql');
     sort($files);
@@ -39,34 +43,51 @@ try {
         $filename = basename($file);
 
         if (in_array($filename, $executed)) {
+            outputLine("[ SKIP ] Migration {$filename} já foi executada.");
             continue;
         }
 
-        echo "Executando migration: {$filename}... ";
+        outputLine("Executando migration: {$filename}...");
 
-        $sql = file_get_contents($file);
+        $sqlRaw = file_get_contents($file);
 
-        $pdo->beginTransaction();
+        // Remove comentários SQL do tipo '-- ...' de cada linha
+        $lines = explode("\n", $sqlRaw);
+        $cleanLines = [];
+        foreach ($lines as $line) {
+            $trimmedLine = trim($line);
+            if (str_starts_with($trimmedLine, '--')) {
+                continue;
+            }
+            $cleanLines[] = $line;
+        }
+        $sqlClean = implode("\n", $cleanLines);
+
+        // Divide pelas instruções SQL terminadas em ';'
+        $statements = array_filter(
+            array_map('trim', explode(';', $sqlClean)),
+            fn($stmt) => !empty($stmt)
+        );
+
         try {
-            $pdo->exec($sql);
+            foreach ($statements as $statement) {
+                $pdo->exec($statement);
+            }
             
             $stmtInsert = $pdo->prepare("INSERT INTO schema_migrations (migration) VALUES (:migration)");
             $stmtInsert->execute([':migration' => $filename]);
 
-            $pdo->commit();
-            echo "[ OK ]\n";
+            outputLine("[ OK ] Migration {$filename} executada com sucesso.");
             $count++;
         } catch (\Throwable $e) {
-            $pdo->rollBack();
-            echo "[ FALHA ]\n";
-            echo "Erro: " . $e->getMessage() . "\n";
+            outputLine("[ FALHA ] Erro em {$filename}: " . $e->getMessage());
             exit(1);
         }
     }
 
-    echo "Concluído. Total de {$count} migration(s) executada(s).\n";
+    outputLine("Concluído. Total de {$count} migration(s) executada(s).");
 
 } catch (\Throwable $e) {
-    echo "Erro fatal de banco de dados: " . $e->getMessage() . "\n";
+    outputLine("Erro fatal: " . $e->getMessage());
     exit(1);
 }

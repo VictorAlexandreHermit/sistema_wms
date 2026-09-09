@@ -28,10 +28,10 @@ class Database {
             try {
                 self::$instance = new PDO($dsn, $dbConfig['user'], $dbConfig['pass'], $options);
             } catch (PDOException $e) {
-                // Registra o erro via contingência se o banco de dados falhar
-                if (class_exists('LogHelper')) {
-                    LogHelper::registrarErro($e);
-                }
+                // Registra o erro via contingência em arquivo físico se a conexão com o banco de dados falhar (evita recursão infinita no LogHelper)
+                $logPath = __DIR__ . '/../logs/error.log';
+                $entry = sprintf("[%s] ERRO CONEXAO PDO: %s em %s:%d\n", date('Y-m-d H:i:s'), $e->getMessage(), $e->getFile(), $e->getLine());
+                @file_put_contents($logPath, $entry, FILE_APPEND | LOCK_EX);
                 throw $e;
             }
         }
