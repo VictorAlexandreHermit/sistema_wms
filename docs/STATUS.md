@@ -1,8 +1,8 @@
 # Estado Atual do Projeto - WMS Agiliza
 
-- **Última Atualização:** 2026-08-25
-- **Fase Atual:** Fase 1 - Infraestrutura e Base do Projeto (Concluída e Versionada)
-- **Próximo Passo Recomendado:** Conectar repositório remoto no GitHub e iniciar a Fase 2 - Banco de Dados, Migrations e Cadastros Base
+- **Última Atualização:** 2026-09-09
+- **Fase Atual:** Fase 2 - Banco de Dados, Migrations e Cadastros Base (Concluída)
+- **Próximo Passo Recomendado:** Iniciar a Fase 3 - Autenticação, Sessão, Controle de Acesso (RBAC) e Template Base
 
 ---
 
@@ -11,7 +11,7 @@
 | Fase | Descrição | Status |
 | --- | --- | --- |
 | **Fase 1** | Infraestrutura e Base do Projeto | **Concluída** |
-| **Fase 2** | Banco de Dados, Migrations e Cadastros Base | Pendente |
+| **Fase 2** | Banco de Dados, Migrations e Cadastros Base | **Concluída** |
 | **Fase 3** | Autenticação, Sessão, Controle de Acesso (RBAC) e Template Base | Pendente |
 | **Fase 4** | Módulo de Recebimento, Entrada (Inbound) e Fila de Exceções | Pendente |
 | **Fase 5** | Módulo de Endereçamento e Guarda (Putaway) | Pendente |
@@ -42,3 +42,15 @@
 - [x] Arquivo `.gitattributes` criado normalizando finais de linha (LF) e declarando binários.
 - [x] Commit inicial de versão registrado (`Configura Git e estrutura inicial do WMS Agiliza`).
 - [x] Repositório preparado para vinculação remota ao GitHub.
+
+---
+
+## Checklist da Fase 2 - Banco de Dados, Migrations e Cadastros Base
+
+- [x] Validar a execução das 13 tabelas no MySQL 8.0+.
+- [x] Criar seeder inicial com usuário Gestor padrão e configurações de SLA padrão (120 minutos).
+- [x] Criar `ProdutoModel` e `ProdutoController` com operações CRUD e Soft Delete (`deleted_at`).
+- [x] Criar `EnderecoModel` e `EnderecoController` com formato obrigatorio Rua-Prédio-Nível.
+- [x] Criar `UsuarioModel` com suporte a hashes `bcrypt` e Soft Delete.
+- [x] Desenvolver Views administrativas dos Cadastros Base com tabela Bootstrap local.
+

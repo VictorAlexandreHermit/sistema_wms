@@ -50,12 +50,12 @@ Fase 12 - Validação Transversal, Contingência, Segurança e Deploy
 
 - **Objetivo:** Garantir a execução completa das migrations do MySQL e implementar os Models, Controllers e Views para gestão dos Cadastros Base (Produtos, Endereços e Usuários) com suporte a Soft Delete.
 - **Checklist de Tarefas:**
-  - [ ] Validar a execução das 13 tabelas no MySQL 8.0+.
-  - [ ] Criar seeder inicial com usuário Gestor padrão e configurações de SLA padrão (120 minutos).
-  - [ ] Criar `ProdutoModel` e `ProdutoController` com operações CRUD e Soft Delete (`deleted_at`).
-  - [ ] Criar `EnderecoModel` e `EnderecoController` com formato obrigatorio Rua-Prédio-Nível.
-  - [ ] Criar `UsuarioModel` com suporte a hashes `bcrypt` e Soft Delete.
-  - [ ] Desenvolver Views administrativas dos Cadastros Base com tabela Bootstrap local.
+  - [x] Validar a execução das 13 tabelas no MySQL 8.0+.
+  - [x] Criar seeder inicial com usuário Gestor padrão e configurações de SLA padrão (120 minutos).
+  - [x] Criar `ProdutoModel` e `ProdutoController` com operações CRUD e Soft Delete (`deleted_at`).
+  - [x] Criar `EnderecoModel` e `EnderecoController` com formato obrigatorio Rua-Prédio-Nível.
+  - [x] Criar `UsuarioModel` com suporte a hashes `bcrypt` e Soft Delete.
+  - [x] Desenvolver Views administrativas dos Cadastros Base com tabela Bootstrap local.
 - **Critérios de Pronto:**
   - Tabela `schema_migrations` registrando as migrations com sucesso.
   - Cadastro de Produtos aceitando SKU e Código de Barras únicos.
