@@ -1,0 +1,73 @@
+<%
+    const isEdit = typeof usuarioAlvo !== 'undefined' && usuarioAlvo && usuarioAlvo.id;
+    const title = isEdit ? 'Editar Usuário - WMS Agiliza' : 'Novo Usuário - WMS Agiliza';
+    const actionUrl = isEdit ? '/usuarios/editar?id=' + usuarioAlvo.id : '/usuarios/criar';
+%>
+<%- include('../templates/header', { title: title }) %>
+<%- include('../templates/sidebar', { currentRoute: '/usuarios', usuario: usuario }) %>
+
+<main class="wms-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 fw-bold"><%= isEdit ? 'Editar Usuário' : 'Novo Usuário' %></h1>
+            <p class="text-muted small mb-0"><%= isEdit ? 'Altere as credenciais ou perfil de acesso do colaborador' : 'Cadastre uma nova conta de operador ou gestor' ?></p>
+        </div>
+        <a href="/usuarios" class="btn btn-wms-secondary">
+            &larr; Voltar
+        </a>
+    </div>
+
+    <% if (typeof erro !== 'undefined' && erro) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <%= erro %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+
+    <div class="card-wms">
+        <form method="POST" action="<%= actionUrl %>">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="matricula" class="form-label fw-semibold">Matrícula (Login) <span class="text-danger">*</span></label>
+                    <input type="text" id="matricula" name="matricula" class="form-control tnum" placeholder="Ex: OPER01 ou GESTOR01" required value="<%= typeof formData !== 'undefined' && formData.matricula ? formData.matricula : (isEdit ? usuarioAlvo.matricula : '') %>">
+                    <div class="form-text">Matrícula única utilizada para autenticação no sistema.</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="nome_completo" class="form-label fw-semibold">Nome Completo <span class="text-danger">*</span></label>
+                    <input type="text" id="nome_completo" name="nome_completo" class="form-control" placeholder="Ex: Carlos Alberto da Silva" required value="<%= typeof formData !== 'undefined' && formData.nome_completo ? formData.nome_completo : (isEdit ? usuarioAlvo.nome_completo : '') %>">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="perfil" class="form-label fw-semibold">Perfil de Acesso (RBAC) <span class="text-danger">*</span></label>
+                    <select id="perfil" name="perfil" class="form-select" required>
+                        <% const perfilAtual = typeof formData !== 'undefined' && formData.perfil ? formData.perfil : (isEdit ? usuarioAlvo.perfil : 'OPERADOR'); %>
+                        <option value="OPERADOR" <%= perfilAtual === 'OPERADOR' ? 'selected' : '' %>>OPERADOR - Acesso operacional a recebimento, guarda, picking e avarias</option>
+                        <option value="GESTOR" <%= perfilAtual === 'GESTOR' ? 'selected' : '' %>>GESTOR - Acesso total (aprovação de exceções, auditoria, usuários e dashboard)</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="senha" class="form-label fw-semibold">
+                        <%= isEdit ? 'Nova Senha (opcional)' : 'Senha de Acesso *' %>
+                    </label>
+                    <input type="password" id="senha" name="senha" class="form-control" placeholder="<%= isEdit ? 'Deixe em branco para manter a senha atual' : 'Mínimo de 6 caracteres' %>" <%= isEdit ? '' : 'required' %>>
+                    <% if (isEdit) { %>
+                        <div class="form-text">Preencha somente se desejar alterar a senha do usuário.</div>
+                    <% } else { %>
+                        <div class="form-text">A senha será criptografada com algoritmo seguro (BCrypt).</div>
+                    <% } %>
+                </div>
+
+                <div class="col-12 text-end mt-4">
+                    <a href="/usuarios" class="btn btn-wms-secondary me-2">Cancelar</a>
+                    <button type="submit" class="btn btn-wms-primary">
+                        <%= isEdit ? 'Salvar Alterações' : 'Cadastrar Usuário' %>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+<%- include('../templates/footer', { currentRoute: '/usuarios' }) %>

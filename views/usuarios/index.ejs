@@ -1,0 +1,107 @@
+<%- include('../templates/header', { title: 'Gestão de Usuários - WMS Agiliza' }) %>
+<%- include('../templates/sidebar', { currentRoute: '/usuarios', usuario: usuario }) %>
+
+<main class="wms-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 fw-bold">Gestão de Usuários</h1>
+            <p class="text-muted small mb-0">Administração de operadores e gestores do WMS Agiliza</p>
+        </div>
+        <a href="/usuarios/criar" class="btn btn-wms-primary">
+            + Novo Usuário
+        </a>
+    </div>
+
+    <% if (typeof flash_sucesso !== 'undefined' && flash_sucesso) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <%= flash_sucesso %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+
+    <% if (typeof flash_erro !== 'undefined' && flash_erro) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <%= flash_erro %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+
+    <!-- Card com Filtro de Pesquisa -->
+    <div class="card-wms mb-4">
+        <form method="GET" action="/usuarios" class="row g-2 align-items-center">
+            <div class="col-md-9">
+                <input type="text" name="q" class="form-control" placeholder="Pesquisar por Matrícula ou Nome Completo..." value="<%= typeof q !== 'undefined' ? q : '' %>">
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-wms-secondary w-100">Filtrar</button>
+                <% if (typeof q !== 'undefined' && q) { %>
+                    <a href="/usuarios" class="btn btn-outline-secondary">Limpar</a>
+                <% } %>
+            </div>
+        </form>
+    </div>
+
+    <!-- Tabela de Usuários -->
+    <div class="card-wms p-0 overflow-hidden">
+        <table class="table-wms mb-0">
+            <thead>
+                <tr>
+                    <th>Matrícula</th>
+                    <th>Nome Completo</th>
+                    <th class="text-center">Perfil de Acesso</th>
+                    <th>Data de Cadastro</th>
+                    <th class="text-end">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (!usuarios || usuarios.length === 0) { %>
+                    <tr>
+                        <td colspan="5" class="text-center py-4 text-muted">
+                            Nenhum usuário cadastrado ou encontrado.
+                        </td>
+                    </tr>
+                <% } else { %>
+                    <% usuarios.forEach(function(u) { %>
+                        <% const isSelf = (usuario && Number(u.id) === Number(usuario.id)); %>
+                        <tr>
+                            <td class="fw-bold tnum"><%= u.matricula %></td>
+                            <td>
+                                <%= u.nome_completo %>
+                                <% if (isSelf) { %>
+                                    <span class="badge bg-primary ms-1">Você</span>
+                                <% } %>
+                            </td>
+                            <td class="text-center">
+                                <% if (u.perfil === 'GESTOR') { %>
+                                    <span class="badge-status badge-warning">GESTOR</span>
+                                <% } else { %>
+                                    <span class="badge-status badge-info">OPERADOR</span>
+                                <% } %>
+                            </td>
+                            <td class="tnum small text-muted">
+                                <%= new Date(u.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) %>
+                            </td>
+                            <td class="text-end">
+                                <a href="/usuarios/editar?id=<%= u.id %>" class="btn btn-sm btn-wms-secondary me-1">
+                                    Editar
+                                </a>
+                                <% if (!isSelf) { %>
+                                    <form method="POST" action="/usuarios/excluir" class="d-inline" onsubmit="return confirm('Deseja realmente desativar o usuário <%= u.matricula %>?');">
+                                        <input type="hidden" name="id" value="<%= u.id %>">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            Desativar
+                                        </button>
+                                    </form>
+                                <% } else { %>
+                                    <button class="btn btn-sm btn-outline-secondary" disabled>Ativo</button>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<%- include('../templates/footer', { currentRoute: '/usuarios' }) %>

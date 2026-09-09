@@ -1,7 +1,7 @@
 # Estado Atual do Projeto - WMS Agiliza
 
 - **Ãšltima AtualizaÃ§Ã£o:** 2026-09-09
-- **Fase Atual:** Fase 3 - AutenticaÃ§Ã£o, SessÃ£o, Controle de Acesso (RBAC) e Template Base (ConcluÃ­da)
+- **Fase Atual:** Fase 3 - AutenticaÃ§Ã£o, SessÃ£o, Controle de Acesso (RBAC) e Template Base (ConcluÃ­da - Migrado para Node.js/Express no AI Studio)
 - **PrÃ³ximo Passo Recomendado:** Iniciar a Fase 4 - MÃ³dulo de Recebimento, Entrada (Inbound) e Fila de ExceÃ§Ãµes
 
 ---
@@ -58,12 +58,12 @@
 
 ---
 
-## Checklist da Fase 3 - Autenticação, Sessão, Controle de Acesso (RBAC) e Template Base
+## Checklist da Fase 3 - Autenticaï¿½ï¿½o, Sessï¿½o, Controle de Acesso (RBAC) e Template Base
 
 - [x] Criar AuthController e View de login /login com card centralizado.
-- [x] Implementar verificação de hash com password_verify() e regeneração de ID de sessão (session_regenerate_id(true)).
-- [x] Implementar timeout de sessão automático por inatividade (8 horas).
-- [x] Criar middleware/funções AuthHelper::requireLogin() e AuthHelper::requirePerfil().
-- [x] Criar View de erro 403 (Acesso Negado) e registro automático em logs_seguranca.
+- [x] Implementar verificaï¿½ï¿½o de hash com password_verify() e regeneraï¿½ï¿½o de ID de sessï¿½o (session_regenerate_id(true)).
+- [x] Implementar timeout de sessï¿½o automï¿½tico por inatividade (8 horas).
+- [x] Criar middleware/funï¿½ï¿½es AuthHelper::requireLogin() e AuthHelper::requirePerfil().
+- [x] Criar View de erro 403 (Acesso Negado) e registro automï¿½tico em logs_seguranca.
 - [x] Implementar os templates base (pp/views/templates/header.php, sidebar.php, ooter.php).
 

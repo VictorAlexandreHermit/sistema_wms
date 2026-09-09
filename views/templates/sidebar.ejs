@@ -1,0 +1,31 @@
+<div class="d-flex min-vh-100">
+    <!-- Sidebar -->
+    <aside class="wms-sidebar text-white p-3 d-flex flex-column" style="background-color: #0F172A; width: 250px;">
+        <div class="mb-4 text-center">
+            <h5 class="fw-bold mb-0 text-white">WMS Agiliza</h5>
+            <small class="text-secondary">Gestão de Armazém</small>
+        </div>
+        
+        <nav class="nav flex-column gap-2 mb-auto">
+            <a href="/produtos" class="nav-link text-white <%= (typeof currentRoute !== 'undefined' && currentRoute === '/produtos') ? 'bg-secondary rounded' : '' %>">Produtos</a>
+            <a href="/enderecos" class="nav-link text-white <%= (typeof currentRoute !== 'undefined' && currentRoute === '/enderecos') ? 'bg-secondary rounded' : '' %>">Endereços</a>
+            
+            <% if (typeof usuario !== 'undefined' && usuario && usuario.perfil === 'GESTOR') { %>
+            <a href="/usuarios" class="nav-link text-white <%= (typeof currentRoute !== 'undefined' && currentRoute === '/usuarios') ? 'bg-secondary rounded' : '' %>">Usuários</a>
+            <% } %>
+        </nav>
+
+        <div class="mt-auto border-top border-secondary pt-3">
+            <div class="small mb-3 text-truncate text-light">
+                Logado como:<br>
+                <strong><%= (typeof usuario !== 'undefined' && usuario) ? usuario.nome_completo : 'Usuário' %></strong>
+                <br>(<%= (typeof usuario !== 'undefined' && usuario) ? usuario.perfil : '' %>)
+            </div>
+            <form method="POST" action="/logout">
+                <button type="submit" class="btn btn-sm btn-outline-light w-100">Sair</button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-grow-1 p-4 overflow-auto">

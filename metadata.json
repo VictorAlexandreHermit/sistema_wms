@@ -1,0 +1,6 @@
+{
+  "name": "WMS Agiliza",
+  "description": "Sistema de gerenciamento de armazém (WMS) leve e visual para PMEs com controle de estoque, endereçamento físico e conferência",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

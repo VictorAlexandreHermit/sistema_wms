@@ -1,0 +1,38 @@
+<%- include('../templates/header', { title: 'Login - WMS Agiliza' }) %>
+
+<div class="d-flex align-items-center justify-content-center min-vh-100">
+    <div class="card shadow-sm" style="width: 100%; max-width: 400px; border-radius: 4px; border: 1px solid #E2E8F0;">
+        <div class="card-body p-4 bg-white">
+            <h2 class="text-center fw-bold mb-2" style="color: #0F172A;">WMS Agiliza</h2>
+            <h5 class="text-center text-muted mb-4">Login de Acesso</h5>
+            
+            <% if (typeof erro !== 'undefined' && erro) { %>
+                <div class="alert alert-danger p-2 text-center small"><%= erro %></div>
+            <% } %>
+
+            <% if (typeof flash_sucesso !== 'undefined' && flash_sucesso) { %>
+                <div class="alert alert-success p-2 text-center small"><%= flash_sucesso %></div>
+            <% } %>
+            
+            <form method="POST" action="/login">
+                <div class="mb-3">
+                    <label for="matricula" class="form-label fw-bold">Matrícula</label>
+                    <input type="text" id="matricula" name="matricula" class="form-control" placeholder="Ex: ADMIN01 ou OPER01" required autofocus value="<%= typeof matricula !== 'undefined' ? matricula : '' %>">
+                </div>
+                <div class="mb-4">
+                    <label for="senha" class="form-label fw-bold">Senha</label>
+                    <input type="password" id="senha" name="senha" class="form-control" placeholder="Senha do usuário" required>
+                </div>
+                <button type="submit" class="btn text-white w-100 fw-bold py-2" style="background-color: #0F172A; border-color: #0F172A;">Entrar</button>
+            </form>
+
+            <div class="mt-4 pt-3 border-top text-muted small">
+                <strong>Credenciais de Demonstração:</strong><br>
+                • Gestor: <code>ADMIN01</code> / <code>Gestor@123</code><br>
+                • Operador: <code>OPER01</code> / <code>Operador@123</code>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../templates/footer') %>

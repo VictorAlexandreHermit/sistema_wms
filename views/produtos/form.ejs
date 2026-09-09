@@ -1,0 +1,96 @@
+<%
+    const isEdit = typeof produto !== 'undefined' && produto && produto.id;
+    const title = isEdit ? 'Editar Produto - WMS Agiliza' : 'Novo Produto - WMS Agiliza';
+    const actionUrl = isEdit ? '/produtos/editar?id=' + produto.id : '/produtos/criar';
+%>
+<%- include('../templates/header', { title: title }) %>
+<%- include('../templates/sidebar', { currentRoute: '/produtos', usuario: usuario }) %>
+
+<main class="wms-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 fw-bold"><%= isEdit ? 'Editar Produto' : 'Novo Produto' %></h1>
+            <p class="text-muted small mb-0"><%= isEdit ? 'Atualize as informações do item selecionado' : 'Cadastre um novo item no catálogo de produtos' %></p>
+        </div>
+        <a href="/produtos" class="btn btn-wms-secondary">
+            &larr; Voltar
+        </a>
+    </div>
+
+    <% if (typeof erro !== 'undefined' && erro) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <%= erro %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+
+    <div class="card-wms">
+        <form method="POST" action="<%= actionUrl %>">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="sku" class="form-label fw-semibold">Código SKU <span class="text-danger">*</span></label>
+                    <input type="text" id="sku" name="sku" class="form-control tnum" placeholder="Ex: SKU-1001" required value="<%= typeof formData !== 'undefined' && formData.sku ? formData.sku : (isEdit ? produto.sku : '') %>">
+                    <div class="form-text">Identificador único de estoque (SKU).</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="codigo_barras" class="form-label fw-semibold">Código de Barras (EAN/GTIN) <span class="text-danger">*</span></label>
+                    <input type="text" id="codigo_barras" name="codigo_barras" class="form-control tnum" placeholder="Ex: 7891234567890" required value="<%= typeof formData !== 'undefined' && formData.codigo_barras ? formData.codigo_barras : (isEdit ? produto.codigo_barras : '') %>">
+                    <div class="form-text">Utilizado para validação por leitor de código de barras USB.</div>
+                </div>
+
+                <div class="col-12">
+                    <label for="descricao" class="form-label fw-semibold">Descrição do Produto <span class="text-danger">*</span></label>
+                    <input type="text" id="descricao" name="descricao" class="form-control" placeholder="Ex: Parafuso Sextavado ZB 1/4 x 2 polegadas" required value="<%= typeof formData !== 'undefined' && formData.descricao ? formData.descricao : (isEdit ? produto.descricao : '') %>">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="unidade_medida" class="form-label fw-semibold">Unidade de Medida</label>
+                    <%
+                        const umAtual = typeof formData !== 'undefined' && formData.unidade_medida ? formData.unidade_medida : (isEdit ? produto.unidade_medida : 'UN');
+                        const unidades = [
+                            { val: 'UN', label: 'UN - Unidade' },
+                            { val: 'CX', label: 'CX - Caixa' },
+                            { val: 'KG', label: 'KG - Quilograma' },
+                            { val: 'PCT', label: 'PCT - Pacote' },
+                            { val: 'PAR', label: 'PAR - Par' },
+                            { val: 'RL', label: 'RL - Rolo' }
+                        ];
+                    %>
+                    <select id="unidade_medida" name="unidade_medida" class="form-select">
+                        <% unidades.forEach(function(u) { %>
+                            <option value="<%= u.val %>" <%= umAtual === u.val ? 'selected' : '' %>><%= u.label %></option>
+                        <% }); %>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="curva_abc" class="form-label fw-semibold">Classificação Curva ABC</label>
+                    <%
+                        const curvaAtual = typeof formData !== 'undefined' && formData.curva_abc ? formData.curva_abc : (isEdit ? produto.curva_abc : 'C');
+                        const curvas = [
+                            { val: 'A', label: 'Curva A - Alto Giro / Prioridade Máxima no Kanban' },
+                            { val: 'B', label: 'Curva B - Giro Médio' },
+                            { val: 'C', label: 'Curva C - Baixo Giro / Padrão' }
+                        ];
+                    %>
+                    <select id="curva_abc" name="curva_abc" class="form-select">
+                        <% curvas.forEach(function(c) { %>
+                            <option value="<%= c.val %>" <%= curvaAtual === c.val ? 'selected' : '' %>><%= c.label %></option>
+                        <% }); %>
+                    </select>
+                    <div class="form-text">Produtos de Curva A sobem automaticamente para o topo na fase de picking.</div>
+                </div>
+
+                <div class="col-12 text-end mt-4">
+                    <a href="/produtos" class="btn btn-wms-secondary me-2">Cancelar</a>
+                    <button type="submit" class="btn btn-wms-primary">
+                        <%= isEdit ? 'Salvar Alterações' : 'Cadastrar Produto' %>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+<%- include('../templates/footer', { currentRoute: '/produtos' }) %>

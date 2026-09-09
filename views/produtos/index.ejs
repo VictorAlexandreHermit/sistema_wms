@@ -1,0 +1,98 @@
+<%- include('../templates/header', { title: 'Cadastro de Produtos - WMS Agiliza' }) %>
+<%- include('../templates/sidebar', { currentRoute: '/produtos', usuario: usuario }) %>
+
+<main class="wms-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 fw-bold">Cadastro de Produtos</h1>
+            <p class="text-muted small mb-0">Gerencie os itens do catálogo armazenados no galpão</p>
+        </div>
+        <a href="/produtos/criar" class="btn btn-wms-primary">
+            + Novo Produto
+        </a>
+    </div>
+
+    <% if (typeof flash_sucesso !== 'undefined' && flash_sucesso) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <%= flash_sucesso %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+
+    <% if (typeof flash_erro !== 'undefined' && flash_erro) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <%= flash_erro %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+
+    <!-- Card com Filtro de Pesquisa -->
+    <div class="card-wms mb-4">
+        <form method="GET" action="/produtos" class="row g-2 align-items-center">
+            <div class="col-md-9">
+                <input type="text" name="q" class="form-control" placeholder="Pesquisar por SKU, Código de Barras ou Descrição..." value="<%= typeof q !== 'undefined' ? q : '' %>">
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-wms-secondary w-100">Filtrar</button>
+                <% if (typeof q !== 'undefined' && q) { %>
+                    <a href="/produtos" class="btn btn-outline-secondary">Limpar</a>
+                <% } %>
+            </div>
+        </form>
+    </div>
+
+    <!-- Tabela de Produtos -->
+    <div class="card-wms p-0 overflow-hidden">
+        <table class="table-wms mb-0">
+            <thead>
+                <tr>
+                    <th>SKU</th>
+                    <th>Código de Barras</th>
+                    <th>Descrição</th>
+                    <th class="text-center">Unidade</th>
+                    <th class="text-center">Curva ABC</th>
+                    <th class="text-end">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (!produtos || produtos.length === 0) { %>
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">
+                            Nenhum produto cadastrado ou encontrado na pesquisa.
+                        </td>
+                    </tr>
+                <% } else { %>
+                    <% produtos.forEach(function(p) { %>
+                        <tr>
+                            <td class="fw-bold sku-code tnum"><%= p.sku %></td>
+                            <td class="barcode-code tnum"><%= p.codigo_barras %></td>
+                            <td><%= p.descricao %></td>
+                            <td class="text-center"><span class="badge bg-light text-dark border"><%= p.unidade_medida %></span></td>
+                            <td class="text-center">
+                                <%
+                                    let badgeClass = 'badge-info';
+                                    if (p.curva_abc === 'A') badgeClass = 'badge-danger';
+                                    else if (p.curva_abc === 'B') badgeClass = 'badge-warning';
+                                %>
+                                <span class="badge-status <%= badgeClass %>">Curva <%= p.curva_abc %></span>
+                            </td>
+                            <td class="text-end">
+                                <a href="/produtos/editar?id=<%= p.id %>" class="btn btn-sm btn-wms-secondary me-1">
+                                    Editar
+                                </a>
+                                <form method="POST" action="/produtos/excluir" class="d-inline" onsubmit="return confirm('Deseja realmente desativar o produto <%= p.sku %>?');">
+                                    <input type="hidden" name="id" value="<%= p.id %>">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        Desativar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<%- include('../templates/footer', { currentRoute: '/produtos' }) %>

@@ -1,0 +1,110 @@
+<%- include('../templates/header', { title: 'Cadastro de Endereços Físicos - WMS Agiliza' }) %>
+<%- include('../templates/sidebar', { currentRoute: '/enderecos', usuario: usuario }) %>
+
+<main class="wms-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 fw-bold">Cadastro de Endereços Físicos</h1>
+            <p class="text-muted small mb-0">Mapeamento da estrutura de galpão (Rua - Prédio - Nível)</p>
+        </div>
+        <a href="/enderecos/criar" class="btn btn-wms-primary">
+            + Novo Endereço
+        </a>
+    </div>
+
+    <% if (typeof flash_sucesso !== 'undefined' && flash_sucesso) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <%= flash_sucesso %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+
+    <% if (typeof flash_erro !== 'undefined' && flash_erro) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <%= flash_erro %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+
+    <!-- Card com Filtro de Pesquisa -->
+    <div class="card-wms mb-4">
+        <form method="GET" action="/enderecos" class="row g-2 align-items-center">
+            <div class="col-md-9">
+                <input type="text" name="q" class="form-control" placeholder="Pesquisar por Rua, Prédio ou Nível..." value="<%= typeof q !== 'undefined' ? q : '' %>">
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-wms-secondary w-100">Filtrar</button>
+                <% if (typeof q !== 'undefined' && q) { %>
+                    <a href="/enderecos" class="btn btn-outline-secondary">Limpar</a>
+                <% } %>
+            </div>
+        </form>
+    </div>
+
+    <!-- Tabela de Endereços -->
+    <div class="card-wms p-0 overflow-hidden">
+        <table class="table-wms mb-0">
+            <thead>
+                <tr>
+                    <th>Código Formatado</th>
+                    <th class="text-center">Rua</th>
+                    <th class="text-center">Prédio</th>
+                    <th class="text-center">Nível</th>
+                    <th class="text-end">Capacidade Máx.</th>
+                    <th class="text-center">Tipo</th>
+                    <th class="text-end">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (!enderecos || enderecos.length === 0) { %>
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-muted">
+                            Nenhum endereço físico cadastrado ou encontrado.
+                        </td>
+                    </tr>
+                <% } else { %>
+                    <% enderecos.forEach(function(e) { %>
+                        <%
+                            const isQuarentena = (e.rua === 'QUA' && e.predio === '00' && e.nivel === '00');
+                            const pad = (str) => String(str).padStart(2, '0');
+                            const format = isQuarentena ? 'QUA-00-00' : `R${pad(e.rua)}-P${pad(e.predio)}-N${pad(e.nivel)}`;
+                        %>
+                        <tr>
+                            <td class="fw-bold tnum">
+                                <span class="badge bg-dark text-white px-2 py-1"><%= format %></span>
+                            </td>
+                            <td class="text-center tnum"><%= e.rua %></td>
+                            <td class="text-center tnum"><%= e.predio %></td>
+                            <td class="text-center tnum"><%= e.nivel %></td>
+                            <td class="text-end tnum"><%= Number(e.capacidade_maxima).toLocaleString('pt-BR') %> vol</td>
+                            <td class="text-center">
+                                <% if (isQuarentena) { %>
+                                    <span class="badge bg-danger">Virtual (Bloqueado)</span>
+                                <% } else { %>
+                                    <span class="badge bg-success">Físico Ativo</span>
+                                <% } %>
+                            </td>
+                            <td class="text-end">
+                                <% if (!isQuarentena) { %>
+                                    <a href="/enderecos/editar?id=<%= e.id %>" class="btn btn-sm btn-wms-secondary me-1">
+                                        Editar
+                                    </a>
+                                    <form method="POST" action="/enderecos/excluir" class="d-inline" onsubmit="return confirm('Deseja realmente desativar o endereço <%= format %>?');">
+                                        <input type="hidden" name="id" value="<%= e.id %>">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            Desativar
+                                        </button>
+                                    </form>
+                                <% } else { %>
+                                    <span class="text-muted small">Fixo do Sistema</span>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<%- include('../templates/footer', { currentRoute: '/enderecos' }) %>
