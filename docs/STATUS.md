@@ -1,8 +1,8 @@
 # Estado Atual do Projeto - WMS Agiliza
 
 - **Última Atualização:** 2026-09-09
-- **Fase Atual:** Fase 2 - Banco de Dados, Migrations e Cadastros Base (Concluída)
-- **Próximo Passo Recomendado:** Iniciar a Fase 3 - Autenticação, Sessão, Controle de Acesso (RBAC) e Template Base
+- **Fase Atual:** Fase 3 - Autenticação, Sessão, Controle de Acesso (RBAC) e Template Base (Concluída)
+- **Próximo Passo Recomendado:** Iniciar a Fase 4 - Módulo de Recebimento, Entrada (Inbound) e Fila de Exceções
 
 ---
 
@@ -12,7 +12,7 @@
 | --- | --- | --- |
 | **Fase 1** | Infraestrutura e Base do Projeto | **Concluída** |
 | **Fase 2** | Banco de Dados, Migrations e Cadastros Base | **Concluída** |
-| **Fase 3** | Autenticação, Sessão, Controle de Acesso (RBAC) e Template Base | Pendente |
+| **Fase 3** | Autenticação, Sessão, Controle de Acesso (RBAC) e Template Base | **Concluída** |
 | **Fase 4** | Módulo de Recebimento, Entrada (Inbound) e Fila de Exceções | Pendente |
 | **Fase 5** | Módulo de Endereçamento e Guarda (Putaway) | Pendente |
 | **Fase 6** | Módulo Operacional Kanban (Outbound) e Gestão de SLA | Pendente |
@@ -53,4 +53,17 @@
 - [x] Criar `EnderecoModel` e `EnderecoController` com formato obrigatorio Rua-Prédio-Nível.
 - [x] Criar `UsuarioModel` com suporte a hashes `bcrypt` e Soft Delete.
 - [x] Desenvolver Views administrativas dos Cadastros Base com tabela Bootstrap local.
+
+
+
+---
+
+## Checklist da Fase 3 - Autentica��o, Sess�o, Controle de Acesso (RBAC) e Template Base
+
+- [x] Criar AuthController e View de login /login com card centralizado.
+- [x] Implementar verifica��o de hash com password_verify() e regenera��o de ID de sess�o (session_regenerate_id(true)).
+- [x] Implementar timeout de sess�o autom�tico por inatividade (8 horas).
+- [x] Criar middleware/fun��es AuthHelper::requireLogin() e AuthHelper::requirePerfil().
+- [x] Criar View de erro 403 (Acesso Negado) e registro autom�tico em logs_seguranca.
+- [x] Implementar os templates base (pp/views/templates/header.php, sidebar.php, ooter.php).
 

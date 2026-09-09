@@ -1,44 +1,26 @@
-<?php
-defined('WMS_EXEC') or die('Acesso direto proibido.');
-?>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - WMS Agiliza</title>
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body class="d-flex align-items-center justify-content-center min-vh-100 bg-light">
-    <div class="card card-wms p-4 shadow-sm" style="width: 100%; max-width: 400px;">
-        <div class="text-center mb-4">
-            <h3 class="fw-bold text-dark mb-1">WMS AGILIZA</h3>
-            <p class="text-muted small">Acesso ao Sistema de Armazém</p>
-        </div>
-
-        <?php if (!empty($erro)): ?>
-            <div class="alert alert-danger p-2 small" role="alert">
-                <?= SanitizeHelper::escape($erro) ?>
-            </div>
-        <?php endif; ?>
-
-        <form action="login" method="POST">
-            <?= CsrfHelper::input() ?>
+<?php if (!defined('WMS_EXEC')) { http_response_code(403); die('Acesso direto não permitido.'); } ?>
+<div class="d-flex align-items-center justify-content-center min-vh-100">
+    <div class="card shadow-sm" style="width: 100%; max-width: 400px; border-radius: 4px; border: 1px solid #E2E8F0;">
+        <div class="card-body p-4 bg-white">
+            <h2 class="text-center fw-bold mb-4" style="color: #0F172A;">WMS Agiliza</h2>
+            <h5 class="text-center text-muted mb-4">Login de Acesso</h5>
             
-            <div class="mb-3">
-                <label for="matricula" class="form-label fw-semibold small text-secondary">Matrícula</label>
-                <input type="text" class="form-control" id="matricula" name="matricula" required placeholder="Digite sua matrícula">
-            </div>
-
-            <div class="mb-4">
-                <label for="senha" class="form-label fw-semibold small text-secondary">Senha</label>
-                <input type="password" class="form-control" id="senha" name="senha" required placeholder="Digite sua senha">
-            </div>
-
-            <button type="submit" class="btn btn-wms-primary w-100">Entrar na Operação</button>
-        </form>
+            <?php if (!empty($erro)): ?>
+                <div class="alert alert-danger p-2 text-center small"><?= SanitizeHelper::escape($erro) ?></div>
+            <?php endif; ?>
+            
+            <form method="POST" action="<?= SanitizeHelper::escape($baseUrl) ?>/login">
+                <?= CsrfHelper::input() ?>
+                <div class="mb-3">
+                    <label for="matricula" class="form-label fw-bold">Matrícula</label>
+                    <input type="text" id="matricula" name="matricula" class="form-control" required autofocus>
+                </div>
+                <div class="mb-4">
+                    <label for="senha" class="form-label fw-bold">Senha</label>
+                    <input type="password" id="senha" name="senha" class="form-control" required>
+                </div>
+                <button type="submit" class="btn text-white w-100 fw-bold" style="background-color: #0F172A; border-color: #0F172A;">Entrar</button>
+            </form>
+        </div>
     </div>
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+</div>

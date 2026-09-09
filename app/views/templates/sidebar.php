@@ -1,55 +1,33 @@
-<?php
-if (!defined('WMS_EXEC')) {
-    http_response_code(403);
-    die('Acesso direto não permitido.');
-}
-$currentRoute = $currentRoute ?? '';
-$baseUrl = $baseUrl ?? '/sistema_wms';
-?>
-<aside class="wms-sidebar">
-    <div class="brand">
-        WMS AGILIZA
-    </div>
-    <nav class="nav flex-column mt-3">
-        <a class="nav-link <?= str_starts_with($currentRoute, '/produtos') ? 'active' : '' ?>" href="<?= SanitizeHelper::escape($baseUrl) ?>/produtos">
-            <span>Produtos</span>
-        </a>
-        <a class="nav-link <?= str_starts_with($currentRoute, '/enderecos') ? 'active' : '' ?>" href="<?= SanitizeHelper::escape($baseUrl) ?>/enderecos">
-            <span>Endereços Físicos</span>
-        </a>
-        <?php if (($_SESSION['usuario_perfil'] ?? '') === 'GESTOR'): ?>
-            <a class="nav-link <?= str_starts_with($currentRoute, '/usuarios') ? 'active' : '' ?>" href="<?= SanitizeHelper::escape($baseUrl) ?>/usuarios">
-                <span>Gestão de Usuários</span>
-            </a>
-        <?php endif; ?>
+<?php if (!defined('WMS_EXEC')) { http_response_code(403); die('Acesso direto não permitido.'); } ?>
+<div class="d-flex min-vh-100">
+    <!-- Sidebar -->
+    <aside class="wms-sidebar text-white p-3 d-flex flex-column" style="background-color: #0F172A; width: 250px;">
+        <div class="mb-4 text-center">
+            <h5 class="fw-bold mb-0">WMS Agiliza</h5>
+            <small class="text-muted">Gestão de Armazém</small>
+        </div>
+        
+        <nav class="nav flex-column gap-2 mb-auto">
+            <a href="<?= SanitizeHelper::escape($baseUrl) ?>/produtos" class="nav-link text-white <?= ($currentRoute ?? '') === '/produtos' ? 'bg-secondary rounded' : '' ?>">Produtos</a>
+            <a href="<?= SanitizeHelper::escape($baseUrl) ?>/enderecos" class="nav-link text-white <?= ($currentRoute ?? '') === '/enderecos' ? 'bg-secondary rounded' : '' ?>">Endereços</a>
+            
+            <?php if (($_SESSION['usuario_perfil'] ?? '') === 'GESTOR'): ?>
+            <a href="<?= SanitizeHelper::escape($baseUrl) ?>/usuarios" class="nav-link text-white <?= ($currentRoute ?? '') === '/usuarios' ? 'bg-secondary rounded' : '' ?>">Usuários</a>
+            <?php endif; ?>
+        </nav>
 
-        <div class="px-3 my-2 text-uppercase text-muted small fw-bold" style="font-size: 0.65rem; letter-spacing: 0.05em;">Operações</div>
+        <div class="mt-auto border-top border-secondary pt-3">
+            <div class="small mb-3 text-truncate">
+                Logado como:<br>
+                <strong><?= SanitizeHelper::escape($_SESSION['usuario_nome'] ?? 'Usuário') ?></strong>
+                <br>(<?= SanitizeHelper::escape($_SESSION['usuario_perfil'] ?? '') ?>)
+            </div>
+            <form method="POST" action="<?= SanitizeHelper::escape($baseUrl) ?>/logout">
+                <?= CsrfHelper::input() ?>
+                <button type="submit" class="btn btn-sm btn-outline-light w-100">Sair</button>
+            </form>
+        </div>
+    </aside>
 
-        <a class="nav-link <?= $currentRoute === '/kanban' ? 'active' : '' ?>" href="<?= SanitizeHelper::escape($baseUrl) ?>/kanban">
-            <span>Quadro Kanban</span>
-        </a>
-        <a class="nav-link <?= $currentRoute === '/recebimento' ? 'active' : '' ?>" href="<?= SanitizeHelper::escape($baseUrl) ?>/recebimento">
-            <span>Recebimento</span>
-        </a>
-        <a class="nav-link <?= $currentRoute === '/guarda' ? 'active' : '' ?>" href="<?= SanitizeHelper::escape($baseUrl) ?>/guarda">
-            <span>Instruções de Guarda</span>
-        </a>
-        <a class="nav-link <?= $currentRoute === '/separacao' ? 'active' : '' ?>" href="<?= SanitizeHelper::escape($baseUrl) ?>/separacao/conferir">
-            <span>Picking & Packing</span>
-        </a>
-        <a class="nav-link <?= $currentRoute === '/avarias' ? 'active' : '' ?>" href="<?= SanitizeHelper::escape($baseUrl) ?>/avarias">
-            <span>Quarentena / Avarias</span>
-        </a>
-        <a class="nav-link <?= $currentRoute === '/auditoria' ? 'active' : '' ?>" href="<?= SanitizeHelper::escape($baseUrl) ?>/auditoria">
-            <span>Auditoria de Estoque</span>
-        </a>
-        <?php if (($_SESSION['usuario_perfil'] ?? '') === 'GESTOR'): ?>
-            <a class="nav-link <?= $currentRoute === '/dashboard' ? 'active' : '' ?>" href="<?= SanitizeHelper::escape($baseUrl) ?>/dashboard">
-                <span>Dashboard Executivo</span>
-            </a>
-        <?php endif; ?>
-        <a class="nav-link mt-4 text-danger" href="<?= SanitizeHelper::escape($baseUrl) ?>/logout">
-            <span>Sair do Sistema</span>
-        </a>
-    </nav>
-</aside>
+    <!-- Main Content Area -->
+    <div class="flex-grow-1 p-4 overflow-auto">

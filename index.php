@@ -22,6 +22,7 @@ require_once __DIR__ . '/app/helpers/AuthHelper.php';
 require_once __DIR__ . '/app/controllers/ProdutoController.php';
 require_once __DIR__ . '/app/controllers/EnderecoController.php';
 require_once __DIR__ . '/app/controllers/UsuarioController.php';
+require_once __DIR__ . '/app/controllers/AuthController.php';
 
 // Inicializa a sessão segura
 SessionHelper::init();
@@ -38,12 +39,11 @@ $route = '/' . trim(str_replace($scriptName, '', $requestUri), '/');
 switch ($route) {
     case '/':
     case '/login':
-        if (file_exists(__DIR__ . '/app/views/auth/login.php')) {
-            require __DIR__ . '/app/views/auth/login.php';
-        } else {
-            echo "<h1>WMS Agiliza - Sistema de Gerenciamento de Armazém</h1>";
-            echo "<p>Bem-vindo! Use o menu lateral para navegar nos Cadastros Base.</p>";
-        }
+        AuthController::login();
+        break;
+    
+    case '/logout':
+        AuthController::logout();
         break;
 
     // Rota Utilitária de Seeder de Dados

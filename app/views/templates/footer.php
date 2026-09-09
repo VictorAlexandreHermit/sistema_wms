@@ -1,9 +1,9 @@
-<?php
-defined('WMS_EXEC') or die('Acesso direto proibido.');
-?>
-</div> <!-- .wms-wrapper -->
-
-<!-- Bootstrap 5 Bundle Local -->
-<script src="<?= SanitizeHelper::escape($baseUrl ?? '/sistema_wms') ?>/assets/js/bootstrap.bundle.min.js"></script>
+<?php if (!defined('WMS_EXEC')) { http_response_code(403); die('Acesso direto não permitido.'); } ?>
+    <?php if (isset($currentRoute)): ?>
+        </div> <!-- Fecha flex-grow-1 -->
+    </div> <!-- Fecha d-flex min-vh-100 -->
+    <?php endif; ?>
+    
+    <script src="<?= SanitizeHelper::escape($baseUrl) ?>/assets/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
